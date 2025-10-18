@@ -1,0 +1,14 @@
+Notes on the microtonal composition
+
+- todo add functions for rotating lists!
+
+- figure out process for allowing fade in of notes
+
+- have five good lines now
+- would be good to have chord changes
+
+- s6 kinda belongs with the first two right now
+
+Next:
+- figure out how to do chord changes (in the score)
+- figure out how to gradually change single notes

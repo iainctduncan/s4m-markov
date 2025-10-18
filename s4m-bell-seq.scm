@@ -25,9 +25,9 @@
           :change-seq    #f     ; vector of which beats make a pitch change, when pitch-change = seq
           :vel-seq       #()     ; vector of relative velocities
           :vel           20     
-          :vel-unit      12 
+          :vel-unit      10 
           :vel-slop      5      ; how much vel is randomized on each step
-          :onset-slop    5      ; slop in ms for onset times
+          :onset-slop    3      ; slop in ms for onset times
           :pitch-change  :all ; can be pre, post, both, every, none, or seq
           :change-prob    1     ; chance of a pitch index change happening, 1 = always, 2 = 50% etc
           :change-on-dur  1     ; beat duration that triggers a change
@@ -89,7 +89,6 @@
 
       (let* ((pitch (seq-read ($ :pitch-seq) pitch-index))
              (vel  (get-vel vel-index))
-             (_   (post " - out-vel:" vel))
              (dur  ($ :dur)))
         ;(post "  - out: " pitch vel dur)
         (if (and (= 1 ($ :unmuted)) (> vel 0))
@@ -109,7 +108,10 @@
 
     (define (get-vel vel-index)
       "calculate output velocity from a step-vel"
-      (let* ((step-vel (seq-read ($ :vel-seq) vel-index))
+      (let* ((step-vel (if (> (length ($ :vel-seq)) 0)
+                         ; if there is a vel seq, use, else base vel
+                         (seq-read ($ :vel-seq) vel-index)
+                         ($ :vel)))
              (vel   (+ ($ :vel) (* step-vel ($ :vel-unit))))
              (vel   (+ vel (random ($ :vel-slop)))))
         (cond 
@@ -131,6 +133,10 @@
       (if (= 0 (random ($ :change-prob)))
         (inc-to! pitch-index (length ($ :pitch-seq)))))
 
+    ; some aliases
+    (define (p seq)
+      (set! ($ :pitch-seq) seq))
+
     (define (get k) 
       "get var from settings hash if keyword, or local env otherwise"
       ;(post "(get k) k:" k)
@@ -150,6 +156,7 @@
 
     ; cancel next scheduled iteration and stop playback
     (define (stop)
+      (post "stopping seq" name)
       (cancel-delay delay-handle)
       (cancel-delay start-delay-handle)
       (set! playing? #f))

@@ -192,9 +192,10 @@ See s4m-score-demo.scm for more examples
 
     (define (run-event evt)
       "execute an event entry"
-      ;(post "run-event" evt)
+      (post "run-event" evt)
       ; right now all events are lists that can be evaluated, may be expanded
-      (eval evt))
+      (eval evt)
+      '())
    
     ; playback, normally called as (tick), but can be called with an
     ; arg of time to advance: (tick 120), etc
@@ -217,6 +218,7 @@ See s4m-score-demo.scm for more examples
               (begin
                 (dolist (evt (cadr tick-events-entry)) 
                   ; run the event, if it returns #f, don't run anymore
+                  ; XXX: this is fucked up, Oct-4-2025, it makes scores stop on some events!
                   (set! evt-res (run-event evt))
                   (if (not evt-res)
                     (break)))

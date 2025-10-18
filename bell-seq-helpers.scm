@@ -33,17 +33,28 @@
 
 (define (s4m-reset)
   (post "s4m-reset")
-  (send 'transport 0)
+(send 'transport 0)
   (send 'locate 0)
   (send 'metro 0)
   (delay 100 (lambda() (send 's4m-reset 'bang))))
 
 (define (set-mutes mute-vector)
-  (let ((seq-names '(s1 s2 s3 s4 s5 s6 s7 s8 s9 s10 s11 s12)))
+  (let ((seq-names '(s1 s2 s3 s4 s5 s6 s7 s8)))
     (loop for i to (- (length mute-vector) 1) do
       (begin
         ;(post "i:" i "seq-names:i" (seq-names i))
         (let ((seq (eval (seq-names i)))
               (state (mute-vector i)))
           (seq 'set :unmuted state))))))
+
+(define (set-attrs kw val-vector)
+  (let ((seq-names '(s1 s2 s3 s4 s5 s6 s7 s8 )))
+    (loop for i to (- (length val-vector) 1) do
+      (begin
+        ;(post "i:" i "seq-names:i" (seq-names i))
+        (let ((seq (eval (seq-names i)))
+              (state (val-vector i)))
+          (seq 'set kw state))))))
+
+
 
