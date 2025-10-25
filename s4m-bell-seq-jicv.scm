@@ -5,6 +5,18 @@
 (load-from-max "bell-seq-helpers.scm")
 (load-from-max "music-helpers.scm")
 
+; this version adds processes, examp:
+; (define (proc-1 $ self)
+;   (post "(PROC-1), $:" $ "conf:" self)
+;   (post "attempt to get at s1, posting ref-cps:" (s1 'get :ref-cps) ($ :ref-cps) )
+;   ; mark self as done
+;   (set! (self :done) #t)
+;   )
+; 
+;(s1 'add-process proc-1 (hash-table :reps 4 :until (lambda ()(= 2 1))) 'p1)
+
+; would be great if it could just be a quoted statement!
+
 (define (make-bell-seq name . init-args)
 
   (let ((playing? #f)             ; flag for if on or not (regardless of how clocked) 
@@ -26,11 +38,11 @@
           :dur           120    ; actual note duration
           :beat-seq      #f     ; vector of beat durs in steps: standard bell = [2 2 1 2 2 2 1]   
           :pitch-seq     #f     ; vector of pitch factors     
-          :change-seq    #f     ; vector of which beats make a pitch change, when pitch-change = seq
+          :change-seq    '(1)   ; vector of which beats make a pitch change, when pitch-change = seq
           :amp-seq       #()    ; vector of relative ampocities
           :amp           0      ; base amp, 0 to 1    
-          :amp-unit      .2 
-          :amp-slop      .1     ; how much amp is randomized on each step
+          :amp-unit      .1 
+          :amp-slop      .0     ; how much amp is randomized on each step
           :onset-slop    0      ; slop in ms for onset times
           :pitch-change  :all ; can be pre, post, both, every, none, or seq
           :change-prob    1     ; chance of a pitch index change happening, 1 = always, 2 = 50% etc
@@ -64,22 +76,27 @@
       (post "process registry:" process-reg))
     
     (define (run-processes)
-      (post "(run-processes)")
+      ;(post "(run-processes)")
       (for-each 
         (lambda (p)(exec-process (car p) (cdr p)))
         process-reg))
 
     (define (exec-process handle proc-ht)
-      (post "(exec-process)" handle proc-ht)
-      (let* ((fun (proc-ht :fun))
-             (i   (proc-ht :iter)))
+      ;(post "(exec-process)" handle proc-ht)
+      (let* ((fun    (proc-ht :fun))
+             (i      (proc-ht :iter))
+             (until? (proc-ht :until)))
         ;(post "  - fun to apply:" fun)
         ; call the process function, passing in seq state and process state
         (apply fun (list $ proc-ht))
         (set! (proc-ht :iter) (+ 1 i))
-        ; if we reached the maximum reps or the process marked itself as done, end
-        (if (or (>= i (proc-ht :reps)) 
-                (proc-ht :done))
+        ; end if at max reps, or process marked done, or until pred
+        (if (or 
+                (and (proc-ht :reps) (>= i (proc-ht :reps))) 
+                (proc-ht :done)
+                (if until? 
+                  (apply until? (list $))
+                  #f))  
           (cancel-process handle))))        
 
     ; todo: allow aliases for attribute typing convenience
@@ -152,8 +169,8 @@
               (dolist (dest ($ :frq-outs)) (send dest pitch-cps))
               (out 0 (list chan pitch-out))
               (out 1 (list chan amp))
-              ; midi note out goes out outlet 3, with dur in there
-              (out 2 (list chan dur midi-vel midi-note midi-bend))))))
+              ; outlet 2 sends to hybrid synths, frq, amp, dur-in-ticks
+              (out 2 (list chan pitch-cps amp dur))))))
       ))
 
     (define (seq-read seq index)
@@ -181,7 +198,7 @@
     ); end run-step
 
     (define (play-step)
-      (post "(play-step) beat-dur: " ($ :beat-dur) "beat index:" beat-index)
+      ;(post "(play-step) beat-dur: " ($ :beat-dur) "beat index:" beat-index)
       ;(post "  pitch-seq:" ($ :pitch-seq))
       ; if we are on a short beat and pitch-change is pre, flip
       (if (and (= ($ :beat-dur) ($ :change-on-dur)) 
@@ -331,7 +348,8 @@
       ;(log-debug "dispatch:" args)
       (let* ((msg (car args)) 
              (fun-args (cdr args))
-             (no-process-funs '(get set))  ; list of methods that don't get kwarg processing
+             ; list of methods that don't get kwarg processing
+             (no-process-funs '(get set add-process cancel-process))  
              ;(no-process-funs '(get))  ; list of methods that don't get kwarg processing
              (fun-args (if (member? msg no-process-funs) fun-args (process-kwargs fun-args))))
         (apply (eval msg) fun-args)))

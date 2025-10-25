@@ -12,3 +12,22 @@ Notes on the microtonal composition
 Next:
 - figure out how to do chord changes (in the score)
 - figure out how to gradually change single notes
+
+- base amp thing should be a multiplier so
+  we can also fade in seqs with a process
+
+
+
+Harmon notes:
+
+- alternating between these two is smooth
+  :pitch-seq    '((1) (7/6) (4/3) (7/4) )
+  :pitch-seq    '((1) (7/6) (3/2) (7/4) )
+
+
+- using 9/7 as a root works (sep M3)
+- septimal maj 2: 8/7
+- or sept 3rd over the 7th, (7/4 9/7)
+
+
+
