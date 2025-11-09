@@ -2,6 +2,7 @@
 ;; just intonation over CV
 
 (load-from-max "helpers.scm")
+(load-from-max "ji-helpers.scm")
 (load-from-max "bell-seq-helpers.scm")
 (load-from-max "music-helpers.scm")
 

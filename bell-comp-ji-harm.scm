@@ -39,27 +39,18 @@
   ;(dolist (s (list s1 s2 s3 s4 s5 s6 s7 s8 )) (s 'start))
 )
 
-(s1 'set :step-dur 160 :amp 0.0 :amp-unit 0.05 :pitch-change :all :base-ratio 1/1  
-  :change-seq   '(0   1   1   0   1   0   0)
-  :beat-seq     #(2   2   1   2   2   2   1)
-  :amp-seq      '(4   3   2   4   2   3   2)
-  :root         '(1/1)
-  ;:pitch-seq    '((1) (9/7) (4/3) (7/4) (3/2 3/2) (9/7) (7/4))  ; lines up with pattern
-  ;:pitch-seq    '((1) (4/3) (7/6) (7/4) (9/7 7/4) (3/2) )  ; 6 beats, but sounds nice
-  ;:pitch-seq    '((1) (4/3) (8/7) (7/6) (7/4) (9/7 7/4) (3/2) )  ; 6 beats, but sounds nice
-  ;:pitch-seq    '((1) (4/3) (9/7 7/4 1/2) (7/6) (7/4) (9/7 7/4) (3/2) )  ; 6 beats, but sounds nice
-  :pitch-seq    '((1) (4/3) (8/7) (7/6) (7/4) (9/7 7/4) (3/2) )  ; this is nice, uses both kinds of Maj 2
+(s1 'set :step-dur 160 :amp 0.0 :amp-unit 0.05 :pitch-change :all :base-ratio 1/1  :beat-seq     #(1  1  1  1)    :amp-seq '(1))
+(s1 'set :root '(1/1)
+  :pitch-seq   '((1) (7/6) (3/2) (7/4) (8/7 2/1) (3/2) (7/4) (7/6))
+  ;:pitch-seq   '((1) (7/6) (3/2) (7/4) (9/8 2/1) (3/2) (7/4) (7/6))
+)
+(s1 'set  :root '(7/4 1/2)
+  :pitch-seq    '((1) (9/7) (4/3) (3/2) (12/7) (7/4) (8/7) (4/3))
+)
+(s1 'set  :root '(8/7)
+  :pitch-seq    '((14/9 1/2) (7/4 1/2) (7/6) (1) (9/8) (3/2) (7/4) (4/3)) 
 )
 
-;(s1 'add-process (lambda ($ %) 
-;                    (set! ($ :amp-seq 2) (+ ($ :amp-seq 2) .01))
-;                    (set! ($ :amp-seq 0) (- ($ :amp-seq 0) .01)))
-;  (hash-table :until (lambda($) (>= ($ :amp-seq 2) 3))))
-;(s1 'add-process 
-;  (lambda ($ %)(set! ($ :amp-seq 3) (+ ($ :amp-seq 3) .05)))
-;  (hash-table :reps 100 :until (lambda($)(>= ($ :amp-seq 3) 4)))
-;  'increasing-amp-3
-;  )
 
 (s2 'set :step-dur 160  :amp 0.0 :amp-unit 0.1 :delay 160 :pitch-change :all :base-ratio 1/1  
   :change-seq   '(1   0   1   0   1   0   0)
@@ -95,6 +86,10 @@
   :root         '(1)
   :pitch-seq    '((1/1) (1/2) (7/4) (4/3 1/2) (9/7 7/4)) 
 )
+(define (s4-1)
+  (s4 'set :root '(1)   :pitch-seq '((1/1) (1/2) (7/4) (4/3 1/2) (9/7 7/4))))
+(define (s4-2)
+  (s4 'set :root '(1)   :pitch-seq '((1/1) (1/2) (7/4) (4/3 1/2) (9/7 7/4))))
 
 
 

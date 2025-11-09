@@ -153,7 +153,7 @@ See s4m-score-demo.scm for more examples
       (= 0 (modulo tick-index (* ticks-per-beat beats-per-bar))))
 
     (define (stop)
-      (post name "stopping")
+      (post name "(stop) score stopping")
       (cancel-delay cb-handle)
       (set! playing #f)
       (set! bar-index 0)
@@ -192,7 +192,7 @@ See s4m-score-demo.scm for more examples
 
     (define (run-event evt)
       "execute an event entry"
-      (post "run-event" evt)
+      ;(post "run-event" evt)
       ; right now all events are lists that can be evaluated, may be expanded
       (eval evt)
       '())

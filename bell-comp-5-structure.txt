@@ -1,0 +1,12 @@
+Notes on piece structure
+
+- at 110, 17.5 sec per 8 bars - 6 min is 20 8bars
+
+- 4,7,8, sound cool together
+
+- popping up 2 or 7 between octaves later is nice
+- turning off 1 later is cool with 2 and 7  up high , maybe end that way
+
+- nice background is long reverb cranked on 8 with slow sweeps of res and FC
+  - automate fc and fq from csound
+  - great as background breaking into self osc

@@ -35,12 +35,9 @@
 ; set all sequencers to the same content
 (set-mutes #(1 1 1 1   1 1 1 1  ))
 
-(dolist (s (list s1 s2 s3 s4 s5 s6 s7 s8))
-  (s 'set :step-dur 480 :dur 300 :amp 0.7 :amp-unit 0.2 :pitch-change :all :base-ratio 4/4  
-     :beat-seq     #(1 1 1 1)  
-     :amp-seq '(1 1 1 1)
-     :root         '(1)
-     :pitch-seq    '((1))
-     :pitch-seq    '((1) (5/4) (3/2) (2/1))
-  ))
+(define (tune)
+  (dolist (s (list s1 s2 s3 s4 s5 s6 s7 s8))
+    (s 'set :step-dur 480 :dur 300 :amp 0.4 :amp-unit 0.2 :pitch-change :all :base-ratio 1/1  
+       :beat-seq     #(1 1 1 1)  :amp-seq '(1 1 1 1) :root '(1) :pitch-seq    '((1) (5/4) (3/2) (2/1))
+    )))
 

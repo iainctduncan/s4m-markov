@@ -3,6 +3,7 @@
 (post "loading s4m-bell-1.scm - bell seq experiment file")
 (load-from-max "s4m-bell-seq-jicv.scm")
 (load-from-max "s4m-score-bell-version.scm")
+(load-from-max "bell-comp-5-changes.scm")
 (load-from-max "bell-comp-5-score.scm")
 
 (define s1 (make-bell-seq 's1 :channel 1)) (define s2 (make-bell-seq 's2 :channel 2)) 
@@ -35,8 +36,8 @@
   (send 'metro 1) (send 'transport 1)
   (score 'cue 1) (score 'start)
   ;(set-mutes #(1 1 1 1 0 0 0 0 ))
-  ;(set-mutes #(1 1 1 1   1 1 1 1  ))
-  ;(dolist (s (list s1 s2 s3 s4 s5 s6 s7 s8 )) (s 'start))
+  (set-mutes #(1 1 1 1   1 1 1 1  ))
+  (dolist (s (list s1 s2 s3 s4 s5 s6 s7 s8 )) (s 'start))
 )
 
 (s1 'set :step-dur 160 :amp 0.0 :amp-unit 0.05 :pitch-change :all :base-ratio 1/1  
@@ -44,10 +45,6 @@
   :beat-seq     #(2   2   1   2   2   2   1)
   :amp-seq      '(4   3   2   4   2   3   2)
   :root         '(1/1)
-  ;:pitch-seq    '((1) (9/7) (4/3) (7/4) (3/2 3/2) (9/7) (7/4))  ; lines up with pattern
-  ;:pitch-seq    '((1) (4/3) (7/6) (7/4) (9/7 7/4) (3/2) )  ; 6 beats, but sounds nice
-  ;:pitch-seq    '((1) (4/3) (8/7) (7/6) (7/4) (9/7 7/4) (3/2) )  ; 6 beats, but sounds nice
-  ;:pitch-seq    '((1) (4/3) (9/7 7/4 1/2) (7/6) (7/4) (9/7 7/4) (3/2) )  ; 6 beats, but sounds nice
   :pitch-seq    '((1) (4/3) (8/7) (7/6) (7/4) (9/7 7/4) (3/2) )  ; this is nice, uses both kinds of Maj 2
 )
 
@@ -78,33 +75,41 @@
 ; 
 (s3 'set :step-dur 160 :amp 0.0 :amp-unit 0.2 :delay 0  :pitch-change :all :base-ratio 1/1
   :beat-seq     #(3   2   2   3   2)
-  :amp-seq      '(3   1   2   1) 
-  :pitch-seq    '((0) (7/4 1/2) (4/3) (9/7 7/4 1/2))
-  :pitch-seq    '((7/4 1/2) (7/6) (9/7 7/4) (4/3) (3/2 1/2))
-  ; go to this later
-  ;:pitch-seq    '((7/4 1/2) (7/6) (9/7 7/4) (4/3) (3/2 1/2) (7/4 1/2) (7/6) (9/7 7/4))
+  :amp-seq      '(3   1   2   1   1    0   2   0   1  0 
+                  3   1   2   1   1    0   2   0   1  2)
+  :pitch-seq    '((7/4 1/2) (7/6) (9/7 7/4) (4/3) (3/2 2/2)
+                  (7/4 1/2) (7/6) (9/7 7/4) (4/3) (2)
+                 )
+  ;:pitch-seq    '( 
+  ;                 (7/4 1/2) (7/6) (9/7 7/4) (4/3) (3/2 1/2)
+  ;                 (7/4 1/2) (3/2) (6/5) (4/3) (7/8 2) 
+  ;                 (7/4 1/2) (7/6) (9/7 7/4) (4/3) (3/2 1/2)
+  ;                 (7/4 1/2) (3/2) (6/5) (4/3) (2)
+  ;               )
+  ; this one stays on root
   :root '(1)
 )
 
 ; good as first line to come in on top of 1 and 2; could try a process fade on it?
-(s4 'set :step-dur 160  :amp 0.1 :amp-unit 0.2 :pitch-change :seq  :base-ratio 1/1
+(s4 'set :step-dur 160  :amp 0.1 :amp-unit 0.2 :pitch-change :all  :base-ratio 1/1
   :beat-seq     #(3   2   3   3   2)
   :change-seq   #(1   1   1   1   1)
-  ;:change-seq   #(1   1   0   1   0   1   0)
   :amp-seq    '(2 3 1 3)
   :root         '(1)
   :pitch-seq    '((1/1) (1/2) (7/4) (4/3 1/2) (9/7 7/4)) 
 )
 
-
-
-; works less sure of it though
-(s5 'set :step-dur 160  :amp 0.0 :amp-unit 0.2  :delay 160 :pitch-change :seq  :base-ratio 1/1
+; let's make this simpler? 
+(s5 'set :step-dur 160  :amp 0.0 :amp-unit 0.2  :delay 160 :pitch-change :seq  :base-ratio 2/1
   :beat-seq     #(1   3   1   1   3)
-  :change-seq   #(1   1   0   1  0 )
+  :change-seq   #(1   1   0   1   0)
   :amp-seq    '(3 1 2 1)
   :root         '(1)
   :pitch-seq    '((4/3) (7/4) (3/2) (4/3 2/1))
+  ; ?? 
+  ;:pitch-seq    '((2/1) (7/8 2) (2/1 9/8) (7/8 2))
+  :pitch-seq    '((3/2) (2/1))
+  :pitch-seq    '((4/3) (2/1))
 )
 
 ; nice, 
